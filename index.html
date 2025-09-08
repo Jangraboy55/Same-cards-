@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Connect - Professional Team Building</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --card-bg: #3b82f6;
+            --border-radius: 16px;
+            --shadow: 0 10px 25px rgba(0,0,0,0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            min-height: 90vh;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        .navigation {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #eff6ff;
+            color: var(--primary);
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Page Content */
+        .page-content {
+            padding: 30px;
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid #e2e8f0;
+        }
+
+        .dashboard-card h3 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .start-game-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            margin: 20px 0;
+        }
+
+        .start-game-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Game Styles */
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 30px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .score-board {
+            display: flex;
+            gap: 30px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .game-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .game-btn.secondary {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            color: var(--gray);
+        }
+
+        .game-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-board {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--card-bg), var(--primary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.25);
+        }
+
+        .card.flipped {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border: 2px solid var(--primary);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+        }
+
+        .card.matched {
+            background: linear-gradient(135deg, var(--secondary), #059669);
+            transform: scale(0.96);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .card-content {
+            font-size: 2.5rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card.flipped .card-content,
+        .card.matched .card-content {
+            opacity: 1;
+        }
+
+        .card-back {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--card-bg), var(--primary));
+            transition: opacity 0.3s ease;
+        }
+
+        .card.flipped .card-back,
+        .card.matched .card-back {
+            opacity: 0;
+        }
+
+        .card-back::before {
+            content: '💼';
+            font-size: 2.2rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        /* Questions Section */
+        .question-section {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 40px 30px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 30px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary);
+            border: 1px solid #e2e8f0;
+        }
+
+        .question-card h3 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .question-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .question-item {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 18px 20px;
+            border-radius: 12px;
+            border-left: 3px solid var(--primary);
+            font-weight: 500;
+            color: #334155;
+            transition: var(--transition);
+            border: 1px solid #e2e8f0;
+        }
+
+        .question-item:hover {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            transform: translateX(4px);
+        }
+
+        /* Settings Page */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .setting-option {
+            margin-bottom: 20px;
+        }
+
+        .setting-option label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .setting-option select, .setting-option input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            font-size: 1rem;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: linear-gradient(135deg, var(--secondary), #059669);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: none;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .game-board {
+                grid-template-columns: repeat(3, 1fr);
+                padding: 20px;
+                gap: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .game-info {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .score-board {
+                gap: 20px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-board {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .card-content {
+                font-size: 2rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Team Connect</h1>
+            <p>Professional Memory Matching Game for Team Building</p>
+        </div>
+
+        <div class="navigation">
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="#" class="nav-link" data-page="game"><i class="fas fa-gamepad"></i> Game</a>
+                <a href="#" class="nav-link" data-page="stats"><i class="fas fa-chart-line"></i> Statistics</a>
+                <a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> Settings</a>
+            </div>
+            <div class="user-section">
+                <div class="user-avatar">JD</div>
+                <span>John Doe</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page-content active">
+            <h2 style="margin-bottom: 20px;">Team Building Dashboard</h2>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-gamepad"></i> Current Game</h3>
+                    <p>Start a new matching game to build team connections</p>
+                    <button class="start-game-btn" onclick="showPage('game')">
+                        <i class="fas fa-play"></i> Start Game Now
+                    </button>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-chart-line"></i> Statistics</h3>
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Games Played</div>
+                    <div class="stat-number">84%</div>
+                    <div class="stat-label">Completion Rate</div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-trophy"></i> Achievements</h3>
+                    <p>Your team has unlocked 5 of 12 achievements</p>
+                    <div style="background: #e2e8f0; height: 10px; border-radius: 5px; margin: 15px 0;">
+                        <div style="background: var(--primary); width: 42%; height: 100%; border-radius: 5px;"></div>
+                    </div>
+                    <div class="stat-label">Team Explorer Badge</div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                <div style="display: grid; gap: 15px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div>
+                            <div>Team completed a matching game</div>
+                            <div style="font-size: 0.85rem; color: var(--gray);">2 hours ago</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 40px; height: 40px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <div>New team member joined</div>
+                            <div style="font-size: 0.85rem; color: var(--gray);">1 day ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Page -->
+        <div id="game-page" class="page-content">
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-trophy"></i> Congratulations! You've matched all pairs! Time to discuss those questions!
+            </div>
+
+            <div class="game-info">
+                <div class="score-board">
+                    <div class="score-item">
+                        <div class="score-number" id="moves">0</div>
+                        <div class="score-label">Moves</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-number" id="matches">0</div>
+                        <div class="score-label">Matches</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-number" id="timer">00:00</div>
+                        <div class="score-label">Time</div>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <button class="game-btn" onclick="resetGame()">
+                        <i class="fas fa-redo"></i> New Game
+                    </button>
+                    <button class="game-btn secondary" onclick="showPage('dashboard')">
+                        <i class="fas fa-home"></i> Dashboard
+                    </button>
+                </div>
+            </div>
+
+            <div class="game-board" id="gameBoard"></div>
+
+            <div class="question-section">
+                <div class="question-card">
+                    <h3><i class="fas fa-comments"></i> Ice Breaker Questions</h3>
+                    <p style="margin-bottom: 20px; color: #666;">Use these conversation starters as you play or after completing the game!</p>
+                    <div class="question-list">
+                        <div class="question-item">🌅 What emoji best describes your morning routine?</div>
+                        <div class="question-item">☕ Coffee, tea, or something else to start your day?</div>
+                        <div class="question-item">🎯 What's a work skill you're proud of developing this year?</div>
+                        <div class="question-item">🏠 What's your ideal work-from-home setup?</div>
+                        <div class="question-item">🎵 What song gets you motivated for work?</div>
+                        <div class="question-item">🌟 If you could master any skill instantly, what would it be?</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Page -->
+        <div id="stats-page" class="page-content">
+            <h2 style="margin-bottom: 20px;">Game Statistics</h2>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-history"></i> Game History</h3>
+                    <div style="height: 200px; display: flex; align-it
